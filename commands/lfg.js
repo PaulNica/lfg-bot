@@ -12,9 +12,9 @@ const rankColors = {
 };
 
 function rankImageUrl(rank) {
-    const base = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/public/ranks/';
+    const base = 'https://raw.githubusercontent.com/PaulNica/lfg-bot/assets/ranks/';
     const file = rank.toLowerCase().replace(/\s+/g, '-').replace('supersonic-legend', 'ssl');
-    return `${base}${file}.png`;
+    return `${base}${file}.webp`;
 }
 
 module.exports = {
@@ -108,7 +108,7 @@ module.exports = {
         const colorKey = Object.keys(rankColors).find(key => rank.includes(key)) || 'Champion';
 
         const embed = new EmbedBuilder()
-            .setAuthor({ name: `${interaction.user.username} caută un grup!` })
+            .setAuthor({ name: `${interaction.user.username} caută echipă !` })
             .setColor(rankColors[colorKey])
             .setDescription(
                 `- 🖥️ Platformă: \`${platform}\`
