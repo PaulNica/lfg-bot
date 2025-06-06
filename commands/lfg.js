@@ -108,7 +108,7 @@ module.exports = {
         const colorKey = Object.keys(rankColors).find(key => rank.includes(key)) || 'Champion';
 
         const embed = new EmbedBuilder()
-            .setAuthor({ name: `${interaction.user.username} caută echipă !` })
+            .setAuthor({ name: `${interaction.member.displayName} caută echipă !` })
             .setColor(rankColors[colorKey])
             .setDescription(
                 `- 🖥️ Platformă: \`${platform}\`
