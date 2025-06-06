@@ -1,4 +1,21 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+
+const rankColors = {
+    'Bronze': 0xcd7f32,
+    'Silver': 0xc0c0c0,
+    'Gold': 0xffd700,
+    'Platinum': 0x00bfff,
+    'Diamond': 0x1e90ff,
+    'Champion': 0x8a2be2,
+    'Grand': 0xff1493,
+    'Supersonic': 0xffffff
+};
+
+function rankImageUrl(rank) {
+    const base = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/public/ranks/';
+    const file = rank.toLowerCase().replace(/\s+/g, '-').replace('supersonic-legend', 'ssl');
+    return `${base}${file}.png`;
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,14 +37,14 @@ module.exports = {
                 .setDescription('De câți jucători ai nevoie?')
                 .setRequired(true)
                 .addChoices(
-                { name: '1', value: 1 },
-                { name: '2', value: 2 }
+                    { name: '1', value: 1 },
+                    { name: '2', value: 2 }
                 ))
         .addStringOption(option =>
             option.setName('region')
                 .setDescription('Alege regiunea preferată')
                 .setRequired(true)
-                .addChoices(                    
+                .addChoices(
                     { name: 'EU', value: 'EU' },
                     { name: 'US-East', value: 'USE' },
                     { name: 'Other', value: 'Other' }
@@ -42,7 +59,7 @@ module.exports = {
                     { name: 'Casual', value: 'Casual' },
                     { name: 'Hoops', value: 'Hoops' },
                     { name: 'Rumble', value: 'Rumble' },
-                    { name: 'Dropshot', value: 'Dropshot' },
+                    { name: 'Dropshot', value: 'Dropshot' }
                 ))
         .addStringOption(option =>
             option.setName('rank')
@@ -77,8 +94,8 @@ module.exports = {
                 .setDescription('Este necesar microfonul?')
                 .setRequired(true)
                 .addChoices(
-                { name: 'Da', value: 'Da' },
-                { name: 'Nu', value: 'Nu' }
+                    { name: 'Da', value: 'Da' },
+                    { name: 'Nu', value: 'Nu' }
                 )),
     async execute(interaction) {
         const platform = interaction.options.getString('platform');
@@ -88,15 +105,26 @@ module.exports = {
         const rank = interaction.options.getString('rank');
         const mic = interaction.options.getString('mic_required');
 
-        await interaction.reply({
-            content: `🔍 **Looking for group!**
-- 🖥️ Platformă: ${platform}
-- 🌍 Regiune: ${region}
-- 🎮 Mod de joc: ${playlist}
-- 🏅 Rank: ${rank}
-- 👥 Jucători necesari: ${players}
-- 🎤 Microfon necesar: ${mic}`,
-  ephemeral: false,
-        });
+        const colorKey = Object.keys(rankColors).find(key => rank.includes(key)) || 'Champion';
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: `${interaction.user.username} caută un grup!` })
+            .setColor(rankColors[colorKey])
+            .setDescription(
+                `- 🖥️ Platformă: \`${platform}\`
+` +
+                `- 🌍 Regiune: \`${region}\`
+` +
+                `- 🎮 Mod de joc: \`${playlist}\`
+` +
+                `- 🏅 Rank: \`${rank}\`
+` +
+                `- 👥 Jucători necesari: \`${players}\`
+` +
+                `- 🎤 Microfon necesar: \`${mic}\``
+            )
+            .setThumbnail(rankImageUrl(rank));
+
+        await interaction.reply({ embeds: [embed] });
     },
 };
