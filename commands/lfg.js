@@ -12,7 +12,7 @@ const rankColors = {
 };
 
 function rankImageUrl(rank) {
-    const base = 'https://raw.githubusercontent.com/PaulNica/lfg-bot/assets/ranks/';
+    const base = 'https://raw.githubusercontent.com/PaulNica/lfg-bot/main/assets/ranks/';
     const file = rank.toLowerCase().replace(/\s+/g, '-').replace('supersonic-legend', 'ssl');
     return `${base}${file}.webp`;
 }
